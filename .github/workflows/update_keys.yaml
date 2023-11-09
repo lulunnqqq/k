@@ -26,14 +26,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: master
 
       - name: Setup NodeJS environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install synchrony-cli
         run: npm install -g deobfuscator
@@ -49,7 +49,7 @@ jobs:
         run: python3 .github/scripts/extractKey.py script.cleaned.js key
 
       - name: Checkout ${{ matrix.branch }} branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ matrix.branch }}
           path: key_repo
