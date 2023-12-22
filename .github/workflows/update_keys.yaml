@@ -1,9 +1,6 @@
 name: Update keys
 
 on:
-  schedule:
-    # Run every 10 minutes
-    - cron:  '*/10 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -67,3 +64,20 @@ jobs:
             git commit --amend -m "chore: Updating key"
             git push --force
           fi
+
+  # Workaround for CI schedule event, to prevent it's delays (5min ~ 1h!)
+  manual-rerun:
+    name: Re-run workflow
+    permissions:
+      actions: write
+    needs: update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep for 5 minutes
+        run: sleep 300
+
+      - name: Re-trigger workflow
+        run: gh workflow run update_keys.yaml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
