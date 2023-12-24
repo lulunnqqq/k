@@ -8,8 +8,8 @@ jobs:
     name: Update keys
     permissions:
       contents: write
-
     strategy:
+      fail-fast: false
       matrix:
         include:
           - branch: e1
@@ -71,6 +71,8 @@ jobs:
     permissions:
       actions: write
     needs: update
+    # Always run, except when manually cancelled.
+    if: success() || failure()
     runs-on: ubuntu-latest
     steps:
       - name: Sleep for 5 minutes
